@@ -15,6 +15,12 @@ describe('errorMessage', () => {
     expect(errorMessage(httpError(403))).toBe('Нет административных прав.');
   });
 
+  it('shows the server reason for 401, e.g. a wrong password on login', () => {
+    const body = { error: { status: 401, details: 'Неверный email или пароль.' } };
+    expect(errorMessage(httpError(401, body))).toBe('Неверный email или пароль.');
+    expect(errorMessage(httpError(401))).toBe('Сессия недействительна. Войдите снова.');
+  });
+
   it('uses string details from the API error body', () => {
     const body = { error: { status: 404, details: 'Страница не найдена.' } };
     expect(errorMessage(httpError(404, body))).toBe('Страница не найдена.');
