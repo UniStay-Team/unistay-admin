@@ -1,0 +1,50 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="logo">
+      <span class="mark" aria-hidden="true">U</span>
+      <span class="logo-text">
+        <strong>UniStay</strong>
+        <small>Администрирование</small>
+      </span>
+    </div>
+
+    <nav aria-label="Разделы">
+      <span class="nav-label">Разделы</span>
+      @for (item of menu(); track item.path) {
+        <a [routerLink]="item.path" routerLinkActive="active" ariaCurrentWhenActive="page">
+          <i [class]="'pi ' + item.icon" aria-hidden="true"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <button type="button" class="theme-switch" (click)="theme.toggle()">
+        <i [class]="theme.dark() ? 'pi pi-sun' : 'pi pi-moon'" aria-hidden="true"></i>
+        <span>{{ theme.dark() ? 'Светлая тема' : 'Тёмная тема' }}</span>
+      </button>
+
+      @if (admin(); as current) {
+        <div class="user">
+          <app-avatar [name]="current.name" size="small" />
+          <span class="user-text">
+            <strong>{{ current.name }}</strong>
+            <small>{{ current.email }}</small>
+          </span>
+          <p-button
+            icon="pi pi-sign-out"
+            ariaLabel="Выйти"
+            [text]="true"
+            [rounded]="true"
+            styleClass="logout"
+            (onClick)="logout()"
+          />
+        </div>
+      }
+    </div>
+  </aside>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+</div>

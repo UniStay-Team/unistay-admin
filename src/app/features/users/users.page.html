@@ -1,0 +1,89 @@
+<app-page-header
+  title="Пользователи"
+  description="Студенты, владельцы и администраторы платформы. Только просмотр."
+  [count]="count()"
+  [loading]="list.loading()"
+  (refresh)="list.reload()"
+/>
+
+@if (list.error(); as message) {
+  <div class="error-bar">
+    <p-message severity="error" icon="pi pi-exclamation-circle" [text]="message" />
+    <p-button label="Повторить" icon="pi pi-refresh" severity="secondary" [text]="true" (onClick)="list.reload()" />
+  </div>
+}
+
+<div class="table-card">
+  <p-table
+    [value]="list.rows()"
+    dataKey="id"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="pageSize"
+    [first]="(list.page() - 1) * pageSize"
+    [totalRecords]="list.count()"
+    [loading]="list.loading()"
+    [rowHover]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 5rem">ID</th>
+        <th>Пользователь</th>
+        <th style="width: 9rem">Роль</th>
+        <th style="width: 10rem">Почта</th>
+        <th style="width: 10rem">Статус</th>
+        <th style="width: 10rem">Регистрация</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-user>
+      <tr>
+        <td class="cell-id">#{{ user.id }}</td>
+        <td>
+          <div class="cell-person">
+            <app-avatar [name]="user.name" size="small" />
+            <div class="cell-stack">
+              <span class="cell-main">{{ user.name }}</span>
+              <span class="muted">{{ user.email }}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-stack">
+            <span>{{ roleLabel(user.role) }}</span>
+            @if (user.is_admin) {
+              <span><p-tag value="Администратор" severity="contrast" [rounded]="true" /></span>
+            }
+          </div>
+        </td>
+        <td>
+          @if (user.email_verified) {
+            <span class="flag yes"><i class="pi pi-check-circle" aria-hidden="true"></i>Подтверждена</span>
+          } @else {
+            <span class="flag no"><i class="pi pi-times-circle" aria-hidden="true"></i>Не подтверждена</span>
+          }
+        </td>
+        <td>
+          <p-tag
+            [value]="user.is_active ? 'Активен' : 'Заблокирован'"
+            [severity]="user.is_active ? 'success' : 'danger'"
+            [rounded]="true"
+          />
+        </td>
+        <td class="nowrap">{{ user.date_joined | date: 'd MMM y' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">
+          @if (list.error()) {
+            <app-empty-state icon="pi-times-circle" title="Данные не загружены" text="Проверьте подключение к API и повторите запрос." />
+          } @else {
+            <app-empty-state icon="pi-users" title="Пользователей пока нет" text="Зарегистрированные аккаунты появятся здесь." />
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

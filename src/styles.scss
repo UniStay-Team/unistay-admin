@@ -1,0 +1,135 @@
+/* Глобальные токены и общие стили админки. Цвета компонентов задаёт пресет PrimeNG (core/theme.ts). */
+:root {
+  --app-bg: #f7f7f0;
+  --app-ink: #173d36;
+  --app-sidebar-bg: #173d36;
+  --app-sidebar-text: rgba(255, 255, 255, 0.72);
+  --app-sidebar-active: rgba(255, 255, 255, 0.12);
+  --app-radius: 16px;
+  --app-shadow: 0 1px 2px rgba(23, 61, 54, 0.06), 0 4px 16px rgba(23, 61, 54, 0.05);
+  --app-font: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --app-mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+:root.app-dark {
+  --app-bg: #0e1411;
+  --app-ink: #e6ede8;
+  --app-sidebar-bg: #121b17;
+  --app-sidebar-text: rgba(255, 255, 255, 0.64);
+  --app-sidebar-active: rgba(95, 159, 131, 0.18);
+  --app-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: light;
+}
+
+html.app-dark {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--app-font);
+  font-size: 14px;
+  line-height: 1.5;
+  background: var(--app-bg);
+  color: var(--p-text-color);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--app-ink);
+  letter-spacing: -0.01em;
+}
+
+/* Таблицы разделов */
+.table-card {
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: var(--app-radius);
+  box-shadow: var(--app-shadow);
+  overflow: hidden;
+}
+
+.table-card .p-datatable-thead > tr > th {
+  background: color-mix(in srgb, var(--p-content-background), var(--p-surface-500) 6%);
+  color: var(--p-text-muted-color);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.table-card .p-datatable-tbody > tr > td {
+  vertical-align: middle;
+}
+
+.table-card .p-paginator {
+  border-top: 1px solid var(--p-content-border-color);
+}
+
+.cell-id {
+  font-family: var(--app-mono);
+  font-size: 0.8125rem;
+  color: var(--p-text-muted-color);
+}
+
+.cell-main {
+  font-weight: 600;
+  color: var(--p-text-color);
+}
+
+.muted {
+  color: var(--p-text-muted-color);
+  font-size: 0.8125rem;
+}
+
+.cell-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+}
+
+.cell-person {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.cell-message {
+  max-width: 22rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+.error-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--p-primary-color);
+  outline-offset: 2px;
+}

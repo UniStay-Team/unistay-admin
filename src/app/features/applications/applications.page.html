@@ -1,0 +1,87 @@
+<app-page-header
+  title="Заявки"
+  description="Заявки студентов на места в объявлениях. Только просмотр."
+  [count]="count()"
+  [loading]="list.loading()"
+  (refresh)="list.reload()"
+/>
+
+@if (list.error(); as message) {
+  <div class="error-bar">
+    <p-message severity="error" icon="pi pi-exclamation-circle" [text]="message" />
+    <p-button label="Повторить" icon="pi pi-refresh" severity="secondary" [text]="true" (onClick)="list.reload()" />
+  </div>
+}
+
+<div class="table-card">
+  <p-table
+    [value]="list.rows()"
+    dataKey="id"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="pageSize"
+    [first]="(list.page() - 1) * pageSize"
+    [totalRecords]="list.count()"
+    [loading]="list.loading()"
+    [rowHover]="true"
+    [tableStyle]="{ 'min-width': '48rem' }"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 5rem">ID</th>
+        <th>Студент</th>
+        <th>Объявление</th>
+        <th style="width: 9rem">Статус</th>
+        <th>Сообщение</th>
+        <th style="width: 11rem">Создана</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-application>
+      <tr>
+        <td class="cell-id">#{{ application.id }}</td>
+        <td>
+          <div class="cell-person">
+            <app-avatar [name]="application.student_name" size="small" />
+            <div class="cell-stack">
+              <span class="cell-main">{{ application.student_name }}</span>
+              <span class="muted">ID {{ application.student_id }}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-stack">
+            <span class="cell-main">{{ application.listing_title }}</span>
+            <span class="muted">Объявление #{{ application.listing_id }}</span>
+          </div>
+        </td>
+        <td>
+          <p-tag
+            [value]="statusLabel(application.status).text"
+            [severity]="statusLabel(application.status).severity"
+            [rounded]="true"
+          />
+        </td>
+        <td>
+          @if (application.message) {
+            <span class="cell-message" [title]="application.message">{{ application.message }}</span>
+          } @else {
+            <span class="muted">Без сообщения</span>
+          }
+        </td>
+        <td class="nowrap">{{ application.created_at | date: 'd MMM y, HH:mm' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="6">
+          @if (list.error()) {
+            <app-empty-state icon="pi-times-circle" title="Данные не загружены" text="Проверьте подключение к API и повторите запрос." />
+          } @else {
+            <app-empty-state icon="pi-inbox" title="Заявок пока нет" text="Новая заявка из приложения появится здесь после обновления." />
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
