@@ -1,0 +1,79 @@
+<main class="login">
+  <p-button
+    class="theme-toggle"
+    [icon]="theme.dark() ? 'pi pi-sun' : 'pi pi-moon'"
+    [ariaLabel]="theme.dark() ? 'Светлая тема' : 'Тёмная тема'"
+    severity="secondary"
+    [text]="true"
+    [rounded]="true"
+    (onClick)="theme.toggle()"
+  />
+
+  <section class="panel">
+    <aside class="brand">
+      <div class="logo">
+        <span class="mark" aria-hidden="true">U</span>
+        <span>UniStay</span>
+      </div>
+
+      <div class="brand-copy">
+        <h1>Панель администратора</h1>
+        <p>Пользователи, объявления и заявки платформы студенческой аренды в одном месте.</p>
+      </div>
+
+      <ul class="facts">
+        <li><i class="pi pi-shield" aria-hidden="true"></i>Права проверяются сервером на каждом запросе</li>
+        <li><i class="pi pi-lock" aria-hidden="true"></i>Сессия хранится только до перезагрузки страницы</li>
+      </ul>
+    </aside>
+
+    <form class="form" [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <div class="form-head">
+        <h2>Вход</h2>
+        <p>Используйте учётную запись администратора UniStay.</p>
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <p-iconfield>
+          <p-inputicon class="pi pi-envelope" />
+          <input
+            pInputText
+            id="email"
+            type="email"
+            autocomplete="username"
+            placeholder="admin@example.test"
+            formControlName="email"
+            [fluid]="true"
+            [invalid]="form.controls.email.touched && form.controls.email.invalid"
+          />
+        </p-iconfield>
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <small class="field-error">Введите корректный email.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Пароль</label>
+        <p-password
+          inputId="password"
+          formControlName="password"
+          autocomplete="current-password"
+          [feedback]="false"
+          [toggleMask]="true"
+          [fluid]="true"
+          [invalid]="form.controls.password.touched && form.controls.password.invalid"
+        />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <small class="field-error">Введите пароль.</small>
+        }
+      </div>
+
+      @if (error(); as message) {
+        <p-message severity="error" icon="pi pi-exclamation-circle" [text]="message" />
+      }
+
+      <p-button type="submit" label="Войти" icon="pi pi-arrow-right" iconPos="right" [loading]="submitting()" [fluid]="true" />
+    </form>
+  </section>
+</main>

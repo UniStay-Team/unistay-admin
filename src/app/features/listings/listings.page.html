@@ -1,0 +1,95 @@
+<app-page-header
+  title="Объявления"
+  description="Все объявления владельцев, включая черновики и архив. Только просмотр."
+  [count]="count()"
+  [loading]="list.loading()"
+  (refresh)="list.reload()"
+/>
+
+@if (list.error(); as message) {
+  <div class="error-bar">
+    <p-message severity="error" icon="pi pi-exclamation-circle" [text]="message" />
+    <p-button label="Повторить" icon="pi pi-refresh" severity="secondary" [text]="true" (onClick)="list.reload()" />
+  </div>
+}
+
+<div class="table-card">
+  <p-table
+    [value]="list.rows()"
+    dataKey="id"
+    [lazy]="true"
+    [paginator]="true"
+    [rows]="pageSize"
+    [first]="(list.page() - 1) * pageSize"
+    [totalRecords]="list.count()"
+    [loading]="list.loading()"
+    [rowHover]="true"
+    [tableStyle]="{ 'min-width': '56rem' }"
+    (onLazyLoad)="onLazyLoad($event)"
+  >
+    <ng-template #header>
+      <tr>
+        <th style="width: 5rem">ID</th>
+        <th>Объявление</th>
+        <th>Владелец</th>
+        <th style="width: 10rem">Цена за место</th>
+        <th style="width: 8rem">Места</th>
+        <th style="width: 9rem">Статус</th>
+        <th style="width: 10rem">Создано</th>
+      </tr>
+    </ng-template>
+    <ng-template #body let-listing>
+      <tr>
+        <td class="cell-id">#{{ listing.id }}</td>
+        <td>
+          <div class="cell-stack">
+            <span class="cell-main">{{ listing.title }}</span>
+            <span class="muted">{{ listing.city }}, {{ listing.district }} · {{ listing.address }}</span>
+          </div>
+        </td>
+        <td>
+          <div class="cell-person">
+            <app-avatar [name]="listing.owner_name" size="small" />
+            <div class="cell-stack">
+              <span>{{ listing.owner_name }}</span>
+              <span class="muted">ID {{ listing.owner_id }}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="cell-stack">
+            <span class="cell-main nowrap">{{ listing.price | number: '1.0-2' }} ₸</span>
+            <span class="muted nowrap">Залог {{ listing.deposit | number: '1.0-2' }} ₸</span>
+          </div>
+        </td>
+        <td>
+          <div class="seats">
+            <span class="nowrap">{{ listing.occupied }} из {{ listing.capacity }}</span>
+            <div class="bar" role="img" [attr.aria-label]="'Занято ' + listing.occupied + ' из ' + listing.capacity">
+              <span [style.width.%]="occupancy(listing)"></span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p-tag
+            [value]="statusLabel(listing.status).text"
+            [severity]="statusLabel(listing.status).severity"
+            [rounded]="true"
+          />
+        </td>
+        <td class="nowrap">{{ listing.created_at | date: 'd MMM y' }}</td>
+      </tr>
+    </ng-template>
+    <ng-template #emptymessage>
+      <tr>
+        <td colspan="7">
+          @if (list.error()) {
+            <app-empty-state icon="pi-times-circle" title="Данные не загружены" text="Проверьте подключение к API и повторите запрос." />
+          } @else {
+            <app-empty-state icon="pi-building" title="Объявлений пока нет" text="Объявления владельцев появятся здесь после создания." />
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

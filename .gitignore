@@ -26,3 +26,8 @@ node_modules/
 dist/
 .angular/
 coverage/
+/out-tsc/
+/tmp/
+.sass-cache/
+npm-debug.log*
+Thumbs.db
